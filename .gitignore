@@ -1,3 +1,5 @@
 # ignore all files in this directory
 
 node_modules/
+
+.sass-cache/
