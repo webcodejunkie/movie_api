@@ -1,7 +1,7 @@
 # Skullify
 
 Welcome to my application __Skullify__ 
-This web application will provide users with access to information about different movies, directors, and genres. 
+This web application will provide users with access to information about different horror movies, directors, and genres. 
 Users will be able to sign up, update their personal information, and create a list of their favorite movies.
 
 ## The 5 Ws For Skullify
@@ -25,7 +25,7 @@ list of “Favorite Movies.”
 - *Where*—The application will be hosted online. The Skullify application itself is responsive and
 can therefore be used anywhere and on any device, giving all users the same experience
 
-- *Why*—Movie enthusiasts want to be able to access information about different movies,
+- *Why*—Movie enthusiasts want to be able to access information about different horror movies,
 directors, and genres. The server-side of the myFlix application will ensure they have access
 to this information, that their requests can be processed, and that all necessary data can be
 stored.
@@ -58,4 +58,4 @@ the movie rating
 - As a user, I want to be able to receive information on movies, directors, and genres so that I
 can learn more about movies I’ve watched or am interested in.
 
-- As a user, I want to be able to create a profile so I can save data about my favorite movies.
+- As a user, I want to be able to create a profile so I can save data about my favorite horror movies.
