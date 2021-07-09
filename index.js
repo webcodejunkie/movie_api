@@ -51,18 +51,18 @@ let topTen = [
 // record and date as the user changes url endpoints
 app.use(morgan('common'));
 
-// change url endpoints within the public folder
+// route url endpoints within the public folder
 app.use(express.static('public'));
+
+// request a json formatted of the top ten movies array of objects
+app.get('/movies', (req, res) => {
+  res.json(topTen);
+});
 
 // error handle the application if anything were to break
 app.use((err, re, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
-});
-
-// request a json formatted of the top ten movies array of objects
-app.get('/movies', (req, res) => {
-  res.json(topTen);
 });
 
 // listen for port 8080
