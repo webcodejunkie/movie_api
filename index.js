@@ -1,3 +1,4 @@
+// include express module
 const express = require('express'),
   morgan = require('morgan');
 
@@ -64,6 +65,7 @@ app.get('/movies', (req, res) => {
   res.json(topTen);
 });
 
+// listen for port 8080
 app.listen(8080, () => {
   console.log('Web application running port 8080');
 });
