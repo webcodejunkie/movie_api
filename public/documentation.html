@@ -2,11 +2,13 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/scss.css">
+    <link rel="stylesheet" href="css/scss.css">
     <title>Skullify Documentation</title>
   </head>
   <body>
@@ -38,11 +40,12 @@
         <div class="">
           <div class="site-doc-spacing page-title">
             <h1>Skullify Documentation</h1>
+            <hr>
           </div>
         </div>
         <div class="site-doc-content">
           <div class="site-doc-spacing">
-            <h2>The Objective</h2>
+            <h2 class="bloody-text">The Objective</h2>
             <p>
               To build the server-side component of a “movies” web application.
               The web application will provide users with access to information about horror movies, directors, and genres.
@@ -50,20 +53,20 @@
             </p>
           </div>
           <div class="site-doc-spacing">
-            <h2>Context</h2>
+            <h2 class="bloody-text">Context</h2>
             <p>
-              This project will demonstrate a mastery of full-stack JavaScript development, including APIs, web server
-              frameworks, databases, business logic, authentication, data security, and more. The complete tech
+              This project will demonstrate a mastery of full-stack JavaScript development, including <span class="text-highligher">APIs, web server
+              frameworks, databases, business logic, authentication, data security, and more.</span> The complete tech
               stack this project mastery is known as the MERN (MongoDB, Express, React, and Node.js) stack.
             </p>
           </div>
           <div class="site-doc-spacing">
-            <h2>Further Details</h2>
+            <h2 class="bloody-text">Further Details</h2>
             <p>
               The complete server-side of the web application, including the server, business logic,
               and business layers of the application will consist of a well-designed REST API and
-              architected database built using JavaScript, Node.js, Express, and MongoDB. The REST API
-              will be accessed via commonly used HTTP methods like GET and POST. Similar methods
+              architected database built using <span class="text-highligher"> JavaScript, Node.js, Express, and MongoDB. </span>The REST API
+              will be accessed via commonly used <span class="text-highligher">HTTP methods like GET and POST.</span> Similar methods
               (CRUD) will be used to retrieve data from the database and store that data in a non-relational
               way.
             </p>
@@ -75,8 +78,214 @@
               list of “Favorite Movies.”
             </p>
           </div>
+          <div class="table-container">
+            <table class="api-methods-table">
+              <!--First Row-->
+              <tr>
+                <th class="api-methods-table">
+                  <h3>Requests</h3>
+                </th>
+                <th class="api-methods-table">
+                  <h3>URL</h3>
+                </th>
+                <th class="api-methods-table">
+                  <h3>HTTP Methods</h3>
+                </th>
+                <th class="api-methods-table">
+                  <h3>Responces</h3>
+                </th>
+              </tr>
+              <tr>
+                <th class="api-methods-table">
+                  <p>Get a list of all horror movies</p>
+                </th>
+                <th class="api-methods-table">
+                  <p class="text-highligher">"/skullify/movies"</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>Get Method</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>
+                    List all horror movie titles with an image and ratings
+                  </p>
+                </th>
+              </tr>
+              <!--Second Row-->
+              <tr>
+                <th class="api-methods-table">
+                  <p>Create a movie and add it to the array of movies</p>
+                </th>
+                <th class="api-methods-table">
+                  <p class="text-highligher">"/skullify/add-movie"</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>Post Method</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>
+                    Add a movie with a description and image to the list of movies already existing
+                  </p>
+                </th>
+              </tr>
+              <!--Third Row-->
+              <tr>
+                <th class="api-methods-table">
+                  <p>Get more info about a certain movie (description, genre, director, ect)</p>
+                </th>
+                <th class="api-methods-table">
+                  <p class="text-highligher">"/skullify/movies/[movie title]</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>Get Method</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>
+                    Upon clicking on a movie, show a modal with more information on that selected movie
+                  </p>
+                </th>
+              </tr>
+              <!--Fourth Row-->
+              <tr>
+                <th class="api-methods-table">
+                  <p>Return a list of different genres within the horror movies</p>
+                </th>
+                <th class="api-methods-table">
+                  <p class="text-highligher">"/skullify/movies/genres"</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>Get Method</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>
+                    Filter through specific genres within horror movies
+                  </p>
+                </th>
+              </tr>
+              <!--Fifth Row-->
+              <tr>
+                <th class="api-methods-table">
+                  <p>Get data about a director (birth year, bio, etc)</p>
+                </th>
+                <th class="api-methods-table">
+                  <p class="text-highligher">"/skullify/movies/title/[director]"</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>Get Method</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>
+                    Get data on different directors
+                  </p>
+                </th>
+              </tr>
+              <!--Sixth Row-->
+              <tr>
+                <th class="api-methods-table">
+                  <p>Allow new users to register</p>
+                </th>
+                <th class="api-methods-table">
+                  <p class="text-highligher">"/skullify/register"</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>Post Method</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>
+                    Allow users to sign up via email and create a skullify account to be able to use the application features such as rating and commenting
+                  </p>
+                </th>
+              </tr>
+              <!--Seventh Row-->
+              <tr>
+                <th class="api-methods-table">
+                  <p>Allow users to login</p>
+                </th>
+                <th class="api-methods-table">
+                  <p class="text-highligher">"/skullify/login"</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>Post Method</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>
+                    A feature where users will login to their account to be able to access a list of their favorite movies and be able to use features
+                  </p>
+                </th>
+              </tr>
+              <!--Eigth Row-->
+              <tr>
+                <th class="api-methods-table">
+                  <p>Allow users to update their user info (username)</p>
+                </th>
+                <th class="api-methods-table">
+                  <p class="text-highligher">"/skullify/[user]/changeinfo"</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>Put Method</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>
+                    Users will be able to update their user information such as username or personal information as they please
+                  </p>
+                </th>
+              </tr>
+              <!--Ninth Row-->
+              <tr>
+                <th class="api-methods-table">
+                  <p>Add a movie to a list of a users favorites</p>
+                </th>
+                <th class="api-methods-table">
+                  <p class="text-highligher">"/skullify/[user]/movies/[title]/add"</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>Post Method</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>
+                    Skullify users will be able to add a movie to their list of favorites and have it displayed on their profile
+                  </p>
+                </th>
+              </tr>
+              <!--Tenth Row-->
+              <tr>
+                <th class="api-methods-table">
+                  <p>Remove a movie to a list of a users favorites</p>
+                </th>
+                <th class="api-methods-table">
+                  <p class="text-highligher">"/skullify/[user]/movies/[title]/remove"</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>Delete Method</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>
+                    Users will also be able to remove a movie from list of favorites
+                  </p>
+                </th>
+              </tr>
+              <!--Eleventh Row-->
+              <tr>
+                <th class="api-methods-table">
+                  <p>Allow users to de-register</p>
+                </th>
+                <th class="api-methods-table">
+                  <p class="text-highligher">"/skullify/[user]/unregister"</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>Delete Method</p>
+                </th>
+                <th class="api-methods-table">
+                  <p>
+                    If users wish to remove their account, they will be able to unregister their account displaying a conformation that it was removed
+                  </p>
+                </th>
+              </tr>
+            </table>
+          </div>
         </div>
       </section>
+
 
     </main>
 

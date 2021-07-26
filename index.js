@@ -4,8 +4,29 @@ const express = require('express'),
 
 const app = express();
 
-// List of top 10 movies
-let topTen = [
+// List of Genres
+
+let genres = [
+  {
+    'genre': 'slasher',
+    'movies': []
+  },
+  {
+    'genre': 'scifi',
+    'movies': []
+  },
+  {
+    'genre': 'thriller',
+    'movies': []
+  },
+  {
+    'genre': 'psychological',
+    'movies': []
+  }
+];
+
+// List of movies
+let movies = [
   {
     title: 'THE EXORCIST (1973)',
     author: 'William Peter Blatty'
@@ -55,8 +76,48 @@ app.use(morgan('common'));
 app.use(express.static('public'));
 
 // request a json formatted of the top ten movies array of objects
-app.get('/movies', (req, res) => {
-  res.json(topTen);
+app.get('/skullify/movies', (req, res) => {
+  res.json(movies);
+});
+
+app.post('/skullify/add-movie', (req, res) => {
+  res.send('Add a movie to the array');
+});
+
+app.get('/skullify/movies/title', (req, res) => {
+  res.send('Movie information will go here.');
+});
+
+app.get('/skullify/movies/genres', (req, res) => {
+  res.json(genres);
+});
+
+app.get('/skullify/movies/title/director', (req, res) => {
+  res.send('Information about a specific director will go here.');
+});
+
+app.post('/skullify/register', (req, res) => {
+  res.send('Successfull connection to create an account with Skullify');
+});
+
+app.post('/skullify/login', (req, res) => {
+  res.send('Login successfull!');
+});
+
+app.put('/skullify/user/changeinfo', (req, res) => {
+  res.send('You have changed your info.');
+});
+
+app.post('/skullify/user/movies/title/add', (req, res) => {
+  res.send('Movie added to favorites');
+});
+
+app.delete('/skullify/user/movies/title/remove', (req, res) => {
+  res.send('Movie removed from favorites');
+});
+
+app.delete('/skullify/user/unregister', (req, res) => {
+  res.send('This is where you can unregister your Skullify account');
 });
 
 // error handle the application if anything were to break
@@ -66,6 +127,6 @@ app.use((err, re, res, next) => {
 });
 
 // listen for port 8080
-app.listen(8080, () => {
+app.listen(8080, ()  => {
   console.log('Web application running port 8080');
 });
