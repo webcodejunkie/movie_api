@@ -76,47 +76,47 @@ app.use(morgan('common'));
 app.use(express.static('public'));
 
 // request a json formatted of the top ten movies array of objects
-app.get('/skullify/movies', (req, res) => {
+app.get('/movies', (req, res) => {
   res.json(movies);
 });
 
-app.post('/skullify/add-movie', (req, res) => {
+app.post('/movies', (req, res) => {
   res.send('Add a movie to the array');
 });
 
-app.get('/skullify/movies/title', (req, res) => {
+app.get('/movies/title', (req, res) => {
   res.send('Movie information will go here.');
 });
 
-app.get('/skullify/movies/genres', (req, res) => {
+app.get('/movies/genres', (req, res) => {
   res.json(genres);
 });
 
-app.get('/skullify/movies/title/director', (req, res) => {
+app.get('/movies/title/director', (req, res) => {
   res.send('Information about a specific director will go here.');
 });
 
-app.post('/skullify/register', (req, res) => {
+app.post('/register', (req, res) => {
   res.send('Successfull connection to create an account with Skullify');
 });
 
-app.post('/skullify/login', (req, res) => {
+app.post('/login', (req, res) => {
   res.send('Login successfull!');
 });
 
-app.put('/skullify/user/changeinfo', (req, res) => {
+app.put('/user/changeinfo', (req, res) => {
   res.send('You have changed your info.');
 });
 
-app.post('/skullify/user/movies/title/add', (req, res) => {
+app.post('/user/movies/title/add', (req, res) => {
   res.send('Movie added to favorites');
 });
 
-app.delete('/skullify/user/movies/title/remove', (req, res) => {
+app.delete('/user/movies/title/remove', (req, res) => {
   res.send('Movie removed from favorites');
 });
 
-app.delete('/skullify/user/unregister', (req, res) => {
+app.delete('/user/unregister', (req, res) => {
   res.send('This is where you can unregister your Skullify account');
 });
 
