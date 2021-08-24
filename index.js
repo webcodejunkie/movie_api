@@ -1,73 +1,16 @@
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+
+const Movies = Models.Movie;
+const Users = Models.User;
+
+mongoose.connect('mongodb://localhost:27017/skullifydatabase', { useNewUrlParser: true, useUnifiedTopology: true});
+
 // include express module
 const express = require('express'),
   morgan = require('morgan');
 
 const app = express();
-
-// List of Genres
-
-let genres = [
-  {
-    'genre': 'slasher',
-    'movies': []
-  },
-  {
-    'genre': 'scifi',
-    'movies': []
-  },
-  {
-    'genre': 'thriller',
-    'movies': []
-  },
-  {
-    'genre': 'psychological',
-    'movies': []
-  }
-];
-
-// List of movies
-let movies = [
-  {
-    title: 'THE EXORCIST (1973)',
-    author: 'William Peter Blatty'
-  },
-  {
-    title: 'HEREDITARY (2018)',
-    author: 'Ari Aster'
-  },
-  {
-    title: 'THE CONJURING (2013)',
-    author: 'Chad Hayes / Carey W. Hayes'
-  },
-  {
-    title: 'THE SHINING (1980)',
-    author: 'Stephen King'
-  },
-  {
-    title: 'THE TEXAS CHAINSAW MASSACRE (1974)',
-    author: 'Tobe Hooper / Kim Henkel'
-  },
-  {
-    title: 'THE RING (2002)',
-    author: 'Koji Suzuki'
-  },
-  {
-    title: 'HALLOWEEN (1978)',
-    author: 'John Carpenter / Debra Hill'
-  },
-  {
-    title: 'SINISTER (2012)',
-    author: 'Scott Derrickson / C. Robert Cargill'
-  },
-  {
-    title: 'INSIDIOUS (2010)',
-    author: 'Leigh Whannell'
-  },
-  {
-    title: 'IT (2017)',
-    author: 'Stephen King'
-  },
-];
 
 // record and date as the user changes url endpoints
 app.use(morgan('common'));
@@ -75,49 +18,209 @@ app.use(morgan('common'));
 // route url endpoints within the public folder
 app.use(express.static('public'));
 
-// request a json formatted of the top ten movies array of objects
+// Get a list of movies from the database
 app.get('/movies', (req, res) => {
-  res.json(movies);
+  Movies.find()
+  .then((movies) => {
+    res.json(movies);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error:' + err);
+  });
 });
 
+// Get a certin movie by Title
+app.get('/movies/:MovieID', (req, res) => {
+  Movies.findOne({ Title: req.body.Title })
+  .then((movie) => {
+    res.json(movie);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
+
+// If movie doesn't already exist, create a movie with the following
 app.post('/movies', (req, res) => {
-  res.send('Add a movie to the array');
+  Movies.findOne({ Title: req.body.Title })
+  .then((movies) => {
+    if (movies) {
+      return res.status(400).send(req.body.Title + 'already exists');
+    } else {
+      Movies
+      .create({
+        Title: req.body.Title,
+        Description: req.body.Description,
+        Genre: req.body.Genre,
+        Director: req.body.Director,
+        ImagePath: req.body.ImagePath,
+        Featured: req.body.Featured
+      })
+      .then((movies) => {res.status(201).json(movies) })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error:' + err);
+      });
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error:' + err);
+  });
 });
 
-app.get('/movies/title', (req, res) => {
-  res.send('Movie information will go here.');
+// Get a certin movie with Genre
+app.get('/movies/:Genres', (req, res) => {
+  Movies.find({ Genre: req.body.Genre })
+  .then((genre) => {
+    res.json(genre)
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
 });
 
-app.get('/movies/genres', (req, res) => {
-  res.json(genres);
+// Get a certin movie with certain Director
+app.get('/movies/:Director', (req, res) => {
+  Movies.find({ Director: req.body.Director })
+  .then((director) => {
+    res.json(director)
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
 });
 
-app.get('/movies/title/director', (req, res) => {
-  res.send('Information about a specific director will go here.');
+// Create a user but only if it doesn't exist
+
+app.post('/users', (req, res) => {
+  Users.findOne({ Username: req.body.Username })
+  .then((user) => {
+    if (user) {
+      return res.status(400).send(req.body.Username + 'already exists');
+    } else {
+      Users
+      .create({
+        Username: req.body.Username,
+        Password: req.body.Password,
+        Email: req.body.Email,
+        Birthday: req.body.Birthday
+      })
+      .then((user) => {res.status(201).json(user) })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error:' + err);
+      });
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error:' + err);
+  });
 });
 
-app.post('/register', (req, res) => {
-  res.send('Successfull connection to create an account with Skullify');
+// Get all Users
+
+app.get('/users', (req, res) => {
+  Users.find()
+    .then((user) => {
+      res.json(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error:' + err);
+    });
 });
 
-app.post('/login', (req, res) => {
-  res.send('Login successfull!');
+// Get a user by username
+
+app.get('/users/:Username', (req, res) => {
+  Users.findOne({ Username: req.params.Username })
+    .then((user) => {
+      res.json(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error:' + err);
+    });
 });
 
-app.put('/user/changeinfo', (req, res) => {
-  res.send('You have changed your info.');
+// Update a specific user
+
+app.put('/users/:Username', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
+    {
+      Username: req.body.Username,
+      Password: req.body.Password,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
+    }
+  },
+  { new: true },
+  (err, updatedUser) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  }
+ );
 });
 
-app.post('/user/movies/title/add', (req, res) => {
-  res.send('Movie added to favorites');
+// Delete A User
+app.delete('/users/:Username', (req, res) => {
+  Users.findOneAndRemove({ Username: req.params.Username })
+  .then((user) => {
+    if (!user) {
+      res.status(400).send(req.params.Username + ' was not found');
+    } else {
+      res.status(200).send(req.params.Username + ' was deleted.')
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
 });
 
-app.delete('/user/movies/title/remove', (req, res) => {
-  res.send('Movie removed from favorites');
+// Add a move to a user's list of horror movie favorites
+
+app.post('/users/:Username/movies/:MovieID', (req, res) => {
+  Users.findOneAndUpdate({  Username: req.params.Username }, {
+    $push: { FavoriteMovies: req.params.MovieID }
+  },
+  { new: true },
+  (err, updatedUser) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  }
+ );
 });
 
-app.delete('/user/unregister', (req, res) => {
-  res.send('This is where you can unregister your Skullify account');
+// Remove a move to a user's list of horror movie favorites
+app.delete('/users/:Username/movies/:MovieID', (req, res) => {
+  Users.findOneAndRemove({ Username: req.params.Username }, {
+    $pull: { FavoriteMovie: req.params.MovieID },
+  },
+  { new: true },
+  (err, updatedUser) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  }
+ );
 });
 
 // error handle the application if anything were to break
