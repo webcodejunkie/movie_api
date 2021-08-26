@@ -8,9 +8,12 @@ mongoose.connect('mongodb://localhost:27017/skullifydatabase', { useNewUrlParser
 
 // include express module
 const express = require('express'),
-  morgan = require('morgan');
+  morgan = require('morgan'),
+  bodyParser = require('body-parser');
 
 const app = express();
+
+app.use(bodyParser.json());
 
 // record and date as the user changes url endpoints
 app.use(morgan('common'));
@@ -31,8 +34,8 @@ app.get('/movies', (req, res) => {
 });
 
 // Get a certin movie by Title
-app.get('/movies/:MovieID', (req, res) => {
-  Movies.findOne({ Title: req.body.Title })
+app.get('/movies/:Title', (req, res) => {
+  Movies.findOne({ Title: req.params.Title })
   .then((movie) => {
     res.json(movie);
   })
@@ -72,10 +75,10 @@ app.post('/movies', (req, res) => {
 });
 
 // Get a certin movie with Genre
-app.get('/movies/:Genres', (req, res) => {
-  Movies.find({ Genre: req.body.Genre })
+app.get('/genres/:Title', (req, res) => {
+  Movies.find({ 'Genre.Title': req.params.Title })
   .then((genre) => {
-    res.json(genre)
+    res.json(genre);
   })
   .catch((err) => {
     console.error(err);
@@ -84,8 +87,8 @@ app.get('/movies/:Genres', (req, res) => {
 });
 
 // Get a certin movie with certain Director
-app.get('/movies/:Director', (req, res) => {
-  Movies.find({ Director: req.body.Director })
+app.get('/directors/:Name', (req, res) => {
+  Movies.find({ 'Director.Name': req.params.Name })
   .then((director) => {
     res.json(director)
   })
@@ -209,7 +212,7 @@ app.post('/users/:Username/movies/:MovieID', (req, res) => {
 // Remove a move to a user's list of horror movie favorites
 app.delete('/users/:Username/movies/:MovieID', (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username }, {
-    $pull: { FavoriteMovie: req.params.MovieID },
+    $pull: { FavoriteMovies: req.params.MovieID },
   },
   { new: true },
   (err, updatedUser) => {
