@@ -134,7 +134,7 @@
                   <p>Get more info about a certain movie (description, genre, director, ect)</p>
                 </th>
                 <th class="api-methods-table">
-                  <p class="text-highligher">"/movies/[movie title]</p>
+                  <p class="text-highligher">"/movies/:Title</p>
                 </th>
                 <th class="api-methods-table">
                   <p>Get Method</p>
@@ -151,7 +151,7 @@
                   <p>Return a list of different genres within the horror movies</p>
                 </th>
                 <th class="api-methods-table">
-                  <p class="text-highligher">"/movies/genres"</p>
+                  <p class="text-highligher">"/genres/:Title"</p>
                 </th>
                 <th class="api-methods-table">
                   <p>Get Method</p>
@@ -168,7 +168,7 @@
                   <p>Get data about a director (birth year, bio, etc)</p>
                 </th>
                 <th class="api-methods-table">
-                  <p class="text-highligher">"/movies/title/[director]"</p>
+                  <p class="text-highligher">"/directors/:Name"</p>
                 </th>
                 <th class="api-methods-table">
                   <p>Get Method</p>
@@ -182,10 +182,10 @@
               <!--Sixth Row-->
               <tr>
                 <th class="api-methods-table">
-                  <p>Allow new users to register</p>
+                  <p>Create a new user</p>
                 </th>
                 <th class="api-methods-table">
-                  <p class="text-highligher">"/register"</p>
+                  <p class="text-highligher">"/users"</p>
                 </th>
                 <th class="api-methods-table">
                   <p>Post Method</p>
@@ -196,30 +196,13 @@
                   </p>
                 </th>
               </tr>
-              <!--Seventh Row-->
-              <tr>
-                <th class="api-methods-table">
-                  <p>Allow users to login</p>
-                </th>
-                <th class="api-methods-table">
-                  <p class="text-highligher">"/login"</p>
-                </th>
-                <th class="api-methods-table">
-                  <p>Post Method</p>
-                </th>
-                <th class="api-methods-table">
-                  <p>
-                    A feature where users will login to their account to be able to access a list of their favorite movies and be able to use features
-                  </p>
-                </th>
-              </tr>
               <!--Eigth Row-->
               <tr>
                 <th class="api-methods-table">
                   <p>Allow users to update their user info (username)</p>
                 </th>
                 <th class="api-methods-table">
-                  <p class="text-highligher">"/[user]/changeinfo"</p>
+                  <p class="text-highligher">"/users"</p>
                 </th>
                 <th class="api-methods-table">
                   <p>Put Method</p>
@@ -236,7 +219,7 @@
                   <p>Add a movie to a list of a users favorites</p>
                 </th>
                 <th class="api-methods-table">
-                  <p class="text-highligher">"/[user]/movies/[title]"</p>
+                  <p class="text-highligher">"/users/:Username/movies/MovieID"</p>
                 </th>
                 <th class="api-methods-table">
                   <p>Post Method</p>
@@ -253,7 +236,7 @@
                   <p>Remove a movie to a list of a users favorites</p>
                 </th>
                 <th class="api-methods-table">
-                  <p class="text-highligher">"/[user]/movies/[title]"</p>
+                  <p class="text-highligher">"/users/:Username/movies/MovieID"</p>
                 </th>
                 <th class="api-methods-table">
                   <p>Delete Method</p>
@@ -267,10 +250,10 @@
               <!--Eleventh Row-->
               <tr>
                 <th class="api-methods-table">
-                  <p>Allow users to de-register</p>
+                  <p>Allow users to delete their account</p>
                 </th>
                 <th class="api-methods-table">
-                  <p class="text-highligher">"/[user]/unregister"</p>
+                  <p class="text-highligher">"/user"</p>
                 </th>
                 <th class="api-methods-table">
                   <p>Delete Method</p>

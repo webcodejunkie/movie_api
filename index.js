@@ -211,7 +211,7 @@ app.post('/users/:Username/movies/:MovieID', (req, res) => {
 
 // Remove a move to a user's list of horror movie favorites
 app.delete('/users/:Username/movies/:MovieID', (req, res) => {
-  Users.findOneAndRemove({ Username: req.params.Username }, {
+  Users.findOneAndUpdate({ Username: req.params.Username }, {
     $pull: { FavoriteMovies: req.params.MovieID },
   },
   { new: true },
