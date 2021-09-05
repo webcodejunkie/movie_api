@@ -106,14 +106,15 @@ app.get('/directors/:Name', (req, res) => {
 
 // Create a user but only if it doesn't exist
 
-app.post('/users', (req, res) => {
+app.post('/register', (req, res) => {
   Users.findOne({ Username: req.body.Username })
   .then((user) => {
     if (user) {
-      return res.status(400).send(req.body.Username + 'already exists');
+      return res.status(400).send(req.body.Username + ' already exists');
     } else {
       Users
       .create({
+        Name: req.body.Name,
         Username: req.body.Username,
         Password: req.body.Password,
         Email: req.body.Email,
