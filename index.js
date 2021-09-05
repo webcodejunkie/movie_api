@@ -14,6 +14,12 @@ const express = require('express'),
 const app = express();
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+let auth = require('./auth')(app);
+
+const passport = require('passport');
+require('./passport');
 
 // record and date as the user changes url endpoints
 app.use(morgan('common'));
@@ -22,10 +28,10 @@ app.use(morgan('common'));
 app.use(express.static('public'));
 
 // Get a list of movies from the database
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
   .then((movies) => {
-    res.json(movies);
+    res.status(201).json(movies);
   })
   .catch((err) => {
     console.error(err);
