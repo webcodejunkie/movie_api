@@ -9,7 +9,7 @@ const passport = require('passport'),
 
 passport.use(new LocalStrategy({
   usernameField: 'Username',
-  passwordField: 'Passowrd',
+  passwordField: 'Password'
 }, (username, password, callback) => {
   console.log(username + ' ' + password);
     Users.findOne({ Username: username }, (error, user) => {
