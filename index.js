@@ -6,13 +6,18 @@ const Users = Models.User;
 
 mongoose.connect('mongodb://localhost:27017/skullifydatabase', { useNewUrlParser: true, useUnifiedTopology: true});
 
-// include express module
+// include express module with other middleware apps
 const express = require('express'),
   morgan = require('morgan'),
-  bodyParser = require('body-parser');
+  bodyParser = require('body-parser'),
+  cors = require('cors');
+
+// validation for user inputted information
+const { check, validationResult } = require('express-validator');
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -106,7 +111,20 @@ app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (r
 
 // Create a user but only if it doesn't exist
 
-app.post('/register', (req, res) => {
+app.post('/register' [
+  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username contains non alphanumeric characters — no allowed.').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email does not appear to be valid').isEmail()
+], (req, res) => {
+
+  let errors = validationResult(req);
+
+  if (!error.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  let hashPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username: req.body.Username })
   .then((user) => {
     if (user) {
@@ -116,7 +134,7 @@ app.post('/register', (req, res) => {
       .create({
         Name: req.body.Name,
         Username: req.body.Username,
-        Password: req.body.Password,
+        Password: hashPassword,
         Email: req.body.Email,
         Birthday: req.body.Birthday
       })
@@ -165,7 +183,7 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (r
   Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
     {
       Username: req.body.Username,
-      Password: req.body.Password,
+      Password: hashPassword,
       Email: req.body.Email,
       Birthday: req.body.Birthday
     }
@@ -239,7 +257,8 @@ app.use((err, re, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-// listen for port 8080
-app.listen(8080, ()  => {
-  console.log('Web application running port 8080');
+// listen for the port enviroment
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0', ()  => {
+  console.log('Lisenting on Port ' + port);
 });
