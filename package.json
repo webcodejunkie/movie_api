@@ -2,7 +2,7 @@
   "name": "movie_api",
   "version": "1.0.0",
   "description": "",
-  "engines" : {
+  "engines": {
     "node": "14.17.1",
     "npm": "7.20.0"
   },
@@ -31,6 +31,7 @@
     "morgan": "^1.10.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "path-to-regexp": "^0.1.7"
   }
 }
