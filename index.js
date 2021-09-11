@@ -32,6 +32,10 @@ app.use(morgan('common'));
 // route url endpoints within the public folder
 app.use(express.static('public'));
 
+app.get('/', (req, res) => {
+  res.send('Welcome to me Application!');
+});
+
 // Get a list of movies from the database
 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
