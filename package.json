@@ -2,13 +2,10 @@
   "name": "movie_api",
   "version": "1.0.0",
   "description": "",
-<<<<<<< HEAD
   "engines" : {
     "node": "14.17.1",
     "npm": "7.20.0"
   },
-=======
->>>>>>> 3541fab87d78460cad58c1def3822dc603114aad
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
