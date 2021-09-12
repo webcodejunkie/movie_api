@@ -260,7 +260,7 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { se
 // listen for the port enviroment
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0', ()  => {
-  console.log('Lisenting on Port ' + port);
+  console.log('Listening on Port ' + port);
 });
 
 // error handle the application if anything were to break
