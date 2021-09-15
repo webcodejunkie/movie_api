@@ -128,7 +128,7 @@ app.post('/register', [
     return res.status(422).json({ errors: errors.array() });
   }
 
-  let hashPassword = Users.hashPassword(req.body.Password);
+  let hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username: req.body.Username })
   .then((user) => {
     if (user) {
@@ -157,7 +157,7 @@ app.post('/register', [
 
 // Get all Users
 
-app.get('/users', (req, res) => {
+app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.find()
     .then((user) => {
       res.json(user);
