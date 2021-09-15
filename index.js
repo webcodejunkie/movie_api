@@ -136,7 +136,6 @@ app.post('/register', [
     } else {
       Users
       .create({
-        Name: req.body.Name,
         Username: req.body.Username,
         Password: hashedPassword,
         Email: req.body.Email,
@@ -259,6 +258,7 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { se
 app.use((err, re, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
+  res.send(err.stack);
 });
 
 
