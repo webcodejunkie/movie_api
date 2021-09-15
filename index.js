@@ -138,7 +138,7 @@ app.post('/register', [
       .create({
         Name: req.body.Name,
         Username: req.body.Username,
-        Password: hashPassword,
+        Password: hashedPassword,
         Email: req.body.Email,
         Birthday: req.body.Birthday
       })
