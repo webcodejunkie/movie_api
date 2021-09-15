@@ -117,19 +117,7 @@ app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (r
 
 // Create a user but only if it doesn't exist
 
-app.post('/register', [
-  check('Username', 'Username is required').isLength({min: 5}),
-  check('Username', 'Username contains non alphanumeric characters — no allowed.').isAlphanumeric(),
-  check('Password', 'Password is required').not().isEmpty(),
-  check('Email', 'Email does not appear to be valid').isEmail()
-], (req, res) => {
-
-  let errors = validationResult(req);
-
-  if (!error.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
+app.post('/register', (req, res) => {
   let hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username: req.body.Username })
   .then((user) => {
