@@ -157,7 +157,7 @@ app.post('/register', [
 
 // Get all Users
 
-app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/users', (req, res) => {
   Users.find()
     .then((user) => {
       res.json(user);
@@ -255,16 +255,15 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { se
  );
 });
 
+// error handle the application if anything were to break
+app.use((err, re, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 
 // listen for the port enviroment
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0', ()  => {
   console.log('Listening on Port ' + port);
-});
-
-// error handle the application if anything were to break
-app.use((err, re, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
 });
