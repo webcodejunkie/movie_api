@@ -130,9 +130,6 @@ app.post('/register', [
     return res.status(422).json({ errors: errors.array() });
   }
 
-=======
-app.post('/register', (req, res) => {
->>>>>>> d34461d54749184b3dd1f87a529e398da53ee401
   let hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username: req.body.Username })
   .then((user) => {
