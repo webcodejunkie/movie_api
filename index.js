@@ -71,7 +71,7 @@ app.post('/movies', [
   check('Director', 'Please include a Director').not().isEmpty(),
   check('Featured', 'Please include whether the tile is Featured.').isBoolean(),
 ], passport.authenticate('jwt', { session: false }), (req, res) => {
-  
+
   let errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -228,11 +228,11 @@ app.put('/users/:Username', [
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
-
+  let hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
     {
       Username: req.body.Username,
-      Password: hashPassword,
+      Password: hashedPassword,
       Email: req.body.Email,
       Birthday: req.body.Birthday
     }
