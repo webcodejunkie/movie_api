@@ -19,9 +19,10 @@ const { check, validationResult } = require('express-validator');
 
 const app = express();
 
-app.use(cors());
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 let auth = require('./auth')(app);
 
@@ -260,7 +261,6 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { se
 app.use((err, re, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
-  res.send(err.stack);
 });
 
 
