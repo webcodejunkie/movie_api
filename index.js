@@ -64,7 +64,20 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req
 });
 
 // If movie doesn't already exist, create a movie with the following
-app.post('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.post('/movies', [
+  check('Title', 'Title of movie is required.').not().isEmpty(),
+  check('Description', 'A Description must be present.').not().isEmpty(),
+  check('Genre', 'Please include a Genre').not().isEmpty(),
+  check('Director', 'Please include a Director').not().isEmpty(),
+  check('Featured', 'Please include whether the tile is Featured.').isBoolean(),
+], passport.authenticate('jwt', { session: false }), (req, res) => {
+  
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   Movies.findOne({ Title: req.body.Title })
   .then((movies) => {
     if (movies) {
@@ -159,7 +172,16 @@ app.post('/register', [
 
 // Get all Users
 
-app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/users', [
+  check('Username', 'Username is required').not().isEmpty()
+], passport.authenticate('jwt', { session: false }), (req, res) => {
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   Users.find()
     .then((user) => {
       res.json(user);
@@ -172,7 +194,16 @@ app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =
 
 // Get a user by username
 
-app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/users/:Username', [
+  check('Username', 'Username is required').not().isEmpty()
+], passport.authenticate('jwt', { session: false }), (req, res) => {
+
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   Users.findOne({ Username: req.params.Username })
     .then((user) => {
       res.json(user);
@@ -185,7 +216,19 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (r
 
 // Update a specific user
 
-app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.put('/users/:Username', [
+  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email does not appear to be valid').isEmail()
+], passport.authenticate('jwt', { session: false }), (req, res) => {
+
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
     {
       Username: req.body.Username,
