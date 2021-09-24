@@ -26,14 +26,14 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-// record and date as the user changes url endpoint
+// record and date as the user changes url endpoints
 app.use(morgan('common'));
 
 // route url endpoints within the public folder
 app.use(express.static('public'));
 
 // Get a list of movies from the database
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
