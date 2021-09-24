@@ -33,7 +33,7 @@ app.use(morgan('common'));
 app.use(express.static('public'));
 
 // Get a list of movies from the database
-app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/movies', (req, res) => {
   Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
