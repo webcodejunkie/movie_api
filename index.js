@@ -26,7 +26,7 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-// record and date as the user changes url endpoints
+// record and date as the user changes url endpoint
 app.use(morgan('common'));
 
 // route url endpoints within the public folder
