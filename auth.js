@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken'),
 
 require('./passport');
 
+const { check, validationResult } = require('express-validator');
+
+
 let generateJWTToken = (user) => {
   return jwt.sign(user, jwtSecret, {
     subject: user.Username,
@@ -14,7 +17,18 @@ let generateJWTToken = (user) => {
 }
 
 module.exports = (router) => {
-  router.post('/login', (req, res) => {
+  router.post('/login', [
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty()
+  ], (req, res) => {
+
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
     passport.authenticate('local', { session: false }, (error, user, info) => {
       if (error || !user) {
         return res.status(400).json({
