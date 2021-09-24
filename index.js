@@ -9,17 +9,20 @@ mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnified
 // include express module with other middleware apps
 const express = require('express'),
   morgan = require('morgan'),
-  bodyParser = require('body-parser'),
-  cors = require('cors');
+  bodyParser = require('body-parser');
+
+const cors = require('cors');
+const bcrypt = require('bcrypt');
 
 // validation for user inputted information
 const { check, validationResult } = require('express-validator');
 
 const app = express();
 
-app.use(cors());
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 let auth = require('./auth')(app);
 
@@ -31,6 +34,10 @@ app.use(morgan('common'));
 
 // route url endpoints within the public folder
 app.use(express.static('public'));
+
+app.get('/', (req, res) => {
+  res.send('Welcome to me Application!');
+});
 
 // Get a list of movies from the database
 app.get('/movies', (req, res) => {
@@ -57,7 +64,20 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req
 });
 
 // If movie doesn't already exist, create a movie with the following
-app.post('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.post('/movies', [
+  check('Title', 'Title of movie is required.').not().isEmpty(),
+  check('Description', 'A Description must be present.').not().isEmpty(),
+  check('Genre', 'Please include a Genre').not().isEmpty(),
+  check('Director', 'Please include a Director').not().isEmpty(),
+  check('Featured', 'Please include whether the tile is Featured.').isBoolean(),
+], passport.authenticate('jwt', { session: false }), (req, res) => {
+
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   Movies.findOne({ Title: req.body.Title })
     .then((movies) => {
       if (movies) {
@@ -114,17 +134,20 @@ app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (r
 app.post('/register'[
   check('Username', 'Username is required').isLength({ min: 5 }),
   check('Username', 'Username contains non alphanumeric characters — no allowed.').isAlphanumeric(),
+app.post('/register', [
+  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
   check('Password', 'Password is required').not().isEmpty(),
   check('Email', 'Email does not appear to be valid').isEmail()
 ], (req, res) => {
 
   let errors = validationResult(req);
 
-  if (!error.isEmpty()) {
+  if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
 
-  let hashPassword = Users.hashPassword(req.body.Password);
+  let hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username: req.body.Username })
     .then((user) => {
       if (user) {
@@ -149,11 +172,42 @@ app.post('/register'[
       console.error(err);
       res.status(500).send('Error:' + err);
     });
+  .then((user) => {
+    if (user) {
+      return res.status(400).send(req.body.Username + ' already exists');
+    } else {
+      Users
+      .create({
+        Username: req.body.Username,
+        Password: hashedPassword,
+        Email: req.body.Email,
+        Birthday: req.body.Birthday
+      })
+      .then((user) => {res.status(201).json(user) })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error:' + err);
+      });
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error:' + err);
+  });
 });
 
 // Get all Users
 
-app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/users', [
+  check('Username', 'Username is required').not().isEmpty()
+], passport.authenticate('jwt', { session: false }), (req, res) => {
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   Users.find()
     .then((user) => {
       res.json(user);
@@ -166,7 +220,16 @@ app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =
 
 // Get a user by username
 
-app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/users/:Username', [
+  check('Username', 'Username is required').not().isEmpty()
+], passport.authenticate('jwt', { session: false }), (req, res) => {
+
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   Users.findOne({ Username: req.params.Username })
     .then((user) => {
       res.json(user);
@@ -182,9 +245,23 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (r
 app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, {
     $set:
+app.put('/users/:Username', [
+  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email does not appear to be valid').isEmail()
+], passport.authenticate('jwt', { session: false }), (req, res) => {
+
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+  let hashedPassword = Users.hashPassword(req.body.Password);
+  Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
     {
       Username: req.body.Username,
-      Password: hashPassword,
+      Password: hashedPassword,
       Email: req.body.Email,
       Birthday: req.body.Birthday
     }
@@ -252,14 +329,14 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { se
   );
 });
 
-// error handle the application if anything were to break
-app.use((err, re, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
 
 // listen for the port enviroment
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0', () => {
   console.log('Lisenting on Port ' + port);
+
+// error handle the application if anything were to break
+app.use((err, re, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
