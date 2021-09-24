@@ -131,11 +131,8 @@ app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (r
 
 // Create a user but only if it doesn't exist
 
-app.post('/register'[
-  check('Username', 'Username is required').isLength({ min: 5 }),
-  check('Username', 'Username contains non alphanumeric characters — no allowed.').isAlphanumeric(),
 app.post('/register', [
-  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username is required').isLength({ min: 5 }),
   check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
   check('Password', 'Password is required').not().isEmpty(),
   check('Email', 'Email does not appear to be valid').isEmail()
@@ -155,9 +152,8 @@ app.post('/register', [
       } else {
         Users
           .create({
-            Name: req.body.Name,
             Username: req.body.Username,
-            Password: hashPassword,
+            Password: hashedPassword,
             Email: req.body.Email,
             Birthday: req.body.Birthday
           })
@@ -172,28 +168,6 @@ app.post('/register', [
       console.error(err);
       res.status(500).send('Error:' + err);
     });
-  .then((user) => {
-    if (user) {
-      return res.status(400).send(req.body.Username + ' already exists');
-    } else {
-      Users
-      .create({
-        Username: req.body.Username,
-        Password: hashedPassword,
-        Email: req.body.Email,
-        Birthday: req.body.Birthday
-      })
-      .then((user) => {res.status(201).json(user) })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send('Error:' + err);
-      });
-    }
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).send('Error:' + err);
-  });
 });
 
 // Get all Users
@@ -242,11 +216,8 @@ app.get('/users/:Username', [
 
 // Update a specific user
 
-app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Users.findOneAndUpdate({ Username: req.params.Username }, {
-    $set:
 app.put('/users/:Username', [
-  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username is required').isLength({ min: 5 }),
   check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
   check('Password', 'Password is required').not().isEmpty(),
   check('Email', 'Email does not appear to be valid').isEmail()
@@ -258,7 +229,8 @@ app.put('/users/:Username', [
     return res.status(422).json({ errors: errors.array() });
   }
   let hashedPassword = Users.hashPassword(req.body.Password);
-  Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
+  Users.findOneAndUpdate({ Username: req.params.Username }, {
+    $set:
     {
       Username: req.body.Username,
       Password: hashedPassword,
@@ -333,7 +305,8 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { se
 // listen for the port enviroment
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0', () => {
-  console.log('Lisenting on Port ' + port);
+  console.log('Listening on Port ' + port);
+});
 
 // error handle the application if anything were to break
 app.use((err, re, res, next) => {
