@@ -107,41 +107,41 @@ app.post('/movies', [
 
 // Update an existing movie
 
-app.put('/movies/:Title',
+app.put('/movies/:Title', [
   check('Title', 'Title of movie is required.').not().isEmpty(),
   check('Description', 'A Description must be present.').not().isEmpty(),
   check('Genre', 'Please include a Genre').not().isEmpty(),
   check('Director', 'Please include a Director').not().isEmpty(),
   check('ImagePath', 'Please inlcude a movie poster — Image').not().isEmpty(),
   check('Featured', 'Please include whether the tile is Featured.').isBoolean(),
-  (req, res) => {
-    let errors = validationResult(req);
+], (req, res) => {
+  let errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  Movies.findOneAndUpdate({ Title: req.params.Title }), {
+    $set:
+    {
+      Title: req.body.Title,
+      Description: req.body.Description,
+      Genre: req.body.Genre,
+      Director: req.body.Director,
+      Featured: req.body.Featured,
+      ImagePath: req.body.ImagePath
     }
-
-    Movies.findOneAndUpdate({ Title: req.params.Title }), {
-      $set:
-      {
-        Title: req.body.Title,
-        Description: req.body.Description,
-        Genre: req.body.Genre,
-        Director: req.body.Director,
-        Featured: req.body.Featured,
-        ImagePath: req.body.ImagePath
+  },
+    { new: true },
+    (err, updatedMovie) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      } else {
+        res.json(updatedMovie);
       }
-    },
-      { new: true },
-      (err, updatedMovie) => {
-        if (err) {
-          console.error(err);
-          res.status(500).send('Error: ' + err);
-        } else {
-          res.json(updatedMovie);
-        }
-      }
-  });
+    }
+});
 
 // Get a certin movie with Genre
 app.get('/genres/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
