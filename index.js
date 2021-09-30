@@ -121,7 +121,7 @@ app.put('/movies/:Title', [
     return res.status(422).json({ errors: errors.array() });
   }
 
-  Movies.findOneAndUpdate({ Title: req.params.Title }), {
+  Movies.findOneAndUpdate({ Title: req.params.Title }, {
     $set:
     {
       Title: req.body.Title,
@@ -141,6 +141,7 @@ app.put('/movies/:Title', [
         res.json(updatedMovie);
       }
     }
+  );
 });
 
 // Get a certin movie with Genre
