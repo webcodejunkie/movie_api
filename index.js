@@ -121,7 +121,7 @@ app.put('/movies/:Title',
       return res.status(422).json({ errors: errors.array() });
     }
 
-    Movies.findOneAndUpdate({ Title: req.body.Title }), {
+    Movies.findOneAndUpdate({ Title: req.params.Title }), {
       $set:
       {
         Title: req.body.Title,
