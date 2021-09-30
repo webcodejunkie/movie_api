@@ -107,7 +107,7 @@ app.post('/movies', [
 
 // Update an existing movie
 
-app.put('/movies',
+app.put('/movies/:Title',
   check('Title', 'Title of movie is required.').not().isEmpty(),
   check('Description', 'A Description must be present.').not().isEmpty(),
   check('Genre', 'Please include a Genre').not().isEmpty(),
