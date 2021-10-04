@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 });
 
 // Get a list of movies from the database
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
@@ -114,7 +114,7 @@ app.put('/movies/:Title', [
   check('Director', 'Please include a Director').not().isEmpty(),
   check('ImagePath', 'Please inlcude a movie poster — Image').not().isEmpty(),
   check('Featured', 'Please include whether the tile is Featured.').isBoolean(),
-], (req, res) => {
+], passport.authenticate('jwt', { session: false }), (req, res) => {
   let errors = validationResult(req);
 
   if (!errors.isEmpty()) {
