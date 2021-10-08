@@ -235,7 +235,7 @@ app.get('/users', [
 
 app.get('/users/:Username', [
   check('Username', 'Username is required').not().isEmpty()
-], passport.authenticate('jwt', { session: false }), (req, res) => {
+], (req, res) => {
 
   let errors = validationResult(req);
 
