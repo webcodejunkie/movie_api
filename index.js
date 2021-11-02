@@ -23,7 +23,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let allowedOrigins = ['skullify.netlify.app', 'http://localhost:1234'];
+let allowedOrigins = ['skullify.netlify.app', 'http://localhost:1234', 'https://skullify.herokuapp.com'];
 
 app.use(cors({
   origin: (origin, callback) => {
