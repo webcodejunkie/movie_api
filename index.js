@@ -185,9 +185,11 @@ app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (r
 // Create a user but only if it doesn't exist
 
 app.post('/register', [
+  check('Username', 'Username is required').not().isEmpty(),
   check('Username', 'Username is required').isLength({ min: 5 }),
   check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
   check('Password', 'Password is required').not().isEmpty(),
+  check('Password', 'Password must be more then 8 characters').isLength({ min: 8 }),
   check('Email', 'Email does not appear to be valid').isEmail()
 ], (req, res) => {
 
@@ -270,9 +272,11 @@ app.get('/users/:Username', [
 // Update a specific user
 
 app.put('/users/:Username', [
+  check('Username', 'Username is required').not().isEmpty(),
   check('Username', 'Username is required').isLength({ min: 5 }),
   check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
   check('Password', 'Password is required').not().isEmpty(),
+  check('Password', 'Password must be more then 8 characters').isLength({ min: 8 }),
   check('Email', 'Email does not appear to be valid').isEmail()
 ], passport.authenticate('jwt', { session: false }), (req, res) => {
 
