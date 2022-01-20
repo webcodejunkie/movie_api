@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 const mongoose = require('mongoose');
 const Models = require('./models.js');
 
@@ -744,4 +744,3 @@ app.use((err, re, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
->>>>>>> a71bf9a902c8a059e68f75776f01eb9ddd0b9f4e
