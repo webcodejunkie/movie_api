@@ -22,7 +22,21 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+
+let allowedOrigins = ['https://skullify.netlify.app', 'http://localhost:1234', 'https://skullify.herokuapp.com', 'http://localhost:4200'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      let message = 'The CORS policy for this application does not allow acess from origin' + origin;
+      return callback(new Error(message), false);
+    }
+    return callback(null, true);
+  }
+}));
+
+
 
 let auth = require('./auth')(app);
 
@@ -40,7 +54,7 @@ app.get('/', (req, res) => {
 });
 
 // Get a list of movies from the database
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
@@ -105,6 +119,45 @@ app.post('/movies', [
     });
 });
 
+// Update an existing movie
+
+app.put('/movies/:Title', [
+  check('Title', 'Title of movie is required.').not().isEmpty(),
+  check('Description', 'A Description must be present.').not().isEmpty(),
+  check('Genre', 'Please include a Genre').not().isEmpty(),
+  check('Director', 'Please include a Director').not().isEmpty(),
+  check('ImagePath', 'Please inlcude a movie poster — Image').not().isEmpty(),
+  check('Featured', 'Please include whether the tile is Featured.').isBoolean(),
+], passport.authenticate('jwt', { session: false }), (req, res) => {
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  Movies.findOneAndUpdate({ Title: req.params.Title }, {
+    $set:
+    {
+      Title: req.body.Title,
+      Description: req.body.Description,
+      Genre: req.body.Genre,
+      Director: req.body.Director,
+      Featured: req.body.Featured,
+      ImagePath: req.body.ImagePath
+    }
+  },
+    { new: true },
+    (err, updatedMovie) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      } else {
+        res.json(updatedMovie);
+      }
+    }
+  );
+});
+
 // Get a certin movie with Genre
 app.get('/genres/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find({ 'Genre.Title': req.params.Title })
@@ -117,7 +170,7 @@ app.get('/genres/:Title', passport.authenticate('jwt', { session: false }), (req
     });
 });
 
-// Get a certin movie with certain Director
+// Get a certain movie with certain Director
 app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find({ 'Director.Name': req.params.Name })
     .then((director) => {
@@ -132,9 +185,11 @@ app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (r
 // Create a user but only if it doesn't exist
 
 app.post('/register', [
+  check('Username', 'Username is required').not().isEmpty(),
   check('Username', 'Username is required').isLength({ min: 5 }),
   check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
   check('Password', 'Password is required').not().isEmpty(),
+  check('Password', 'Password must be more then 8 characters').isLength({ min: 8 }),
   check('Email', 'Email does not appear to be valid').isEmail()
 ], (req, res) => {
 
@@ -217,9 +272,11 @@ app.get('/users/:Username', [
 // Update a specific user
 
 app.put('/users/:Username', [
+  check('Username', 'Username is required').not().isEmpty(),
   check('Username', 'Username is required').isLength({ min: 5 }),
   check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
   check('Password', 'Password is required').not().isEmpty(),
+  check('Password', 'Password must be more then 8 characters').isLength({ min: 8 }),
   check('Email', 'Email does not appear to be valid').isEmail()
 ], passport.authenticate('jwt', { session: false }), (req, res) => {
 
