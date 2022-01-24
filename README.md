@@ -1,10 +1,14 @@
-# Skullify
+# Horror Movie API
 
-Welcome to my application __Skullify__ 
-This web application will provide users with access to information about different horror movies, directors, and genres. 
+Welcome to the (API horror movie) movie_api
+This API will provide users with access to information about different horror movies, directors, and genres. 
 Users will be able to sign up, update their personal information, and create a list of their favorite movies.
 
-## The 5 Ws For Skullify
+## Getting Started
+
+if you want to use this API refer to my out folder https://github.com/webcodejunkie/movie_api/tree/master/out opening the index.html locally will present you with documentation on API calling and how to gain access via origin-access.
+
+## The 5 Ws For movie_api
 
 - *Who*—These will be movie enthusiasts who enjoy reading information about different movies 
 and want to engage by giving thier take on critizing movies.
