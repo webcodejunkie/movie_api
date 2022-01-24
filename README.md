@@ -1,7 +1,7 @@
 # Horror Movie API
 
-Welcome to the (API horror movie) movie_api
-This API will provide users with access to information about different horror movies, directors, and genres. 
+Welcome to the (API horror movie) movie_api.
+this API will provide users with access to information about different horror movies, directors, and genres. 
 Users will be able to sign up, update their personal information, and create a list of their favorite movies.
 
 ## Getting Started
