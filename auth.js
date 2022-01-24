@@ -7,7 +7,11 @@ require('./passport');
 
 const { check, validationResult } = require('express-validator');
 
-
+/**
+ * 
+ * @param {*} user 
+ * @returns Token
+ */
 let generateJWTToken = (user) => {
   return jwt.sign(user, jwtSecret, {
     subject: user.Username,
@@ -16,9 +20,19 @@ let generateJWTToken = (user) => {
   });
 }
 
+/**
+ * API call to POST a login request and generate a token upon POST
+ * (/login) <= API call
+ * @method LOGIN(POST)
+ * @requires passport token 
+ * @param {string} Username - The username of the User
+ * @param {string} Password - The password of the User
+ * @returns {object} returns an object of the the created User and sets a jwt token for passport access to other API calls
+ */
+
 module.exports = (router) => {
   router.post('/login', [
-    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username is required').isLength({ min: 5 }),
     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
     check('Password', 'Password is required').not().isEmpty()
   ], (req, res) => {
